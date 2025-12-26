@@ -1,0 +1,285 @@
+/* Reset et base */
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.nuclear-container {
+  --nuclear-green: #00ffaa;
+  --dark-bg: #0a0a12;
+  --text-shadow: 0 0 15px rgba(0, 255, 170, 0.7);
+  --halo-glow: 0 0 30px rgba(0, 255, 170, 0.8), 0 0 60px rgba(0, 255, 170, 0.4);
+  
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: var(--dark-bg);
+color: #00ffaa; /* Changed from white to a shade of green */
+  font-family: 'Orbitron', 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  animation: glowPulse 8s infinite ease-in-out;
+}
+
+/* Remove duplicate navbar styles - using the separate navbar component instead */
+
+/* Effets nucléaires */
+.nuclear-effects {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  background: rgba(0, 255, 170, 0.5);
+  border-radius: 50%;
+  will-change: transform, opacity;
+  animation: float-up linear infinite, twinkle 1.5s infinite alternate;
+}
+
+/* Contenu principal */
+.main-content {
+  position: relative;
+  z-index: 10;
+  min-height: 100vh; /* Full viewport height */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0; /* Remove padding for full screen */
+  animation: fadeIn 1.5s ease-out;
+}
+
+/* Logo avec effets */
+.logo-halo {
+  position: relative;
+  width: 45vmin;
+  max-width: 400px;
+  margin-bottom: 4vh;
+  animation: logoPulse 4s infinite ease-in-out;
+}
+
+/* NOUVELLE APPROCHE : Logo avec cadre élégant et fond lumineux */
+.logo-enhanced-container {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  margin: 0 auto 4vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Fond lumineux derrière le logo */
+.logo-glow-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 255, 170, 0.15) 0%,
+    rgba(0, 204, 136, 0.08) 40%,
+    rgba(0, 255, 170, 0.02) 70%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  animation: gentlePulse 3s ease-in-out infinite;
+  z-index: 1;
+}
+
+/* Cadre lumineux */
+.logo-frame {
+  position: absolute;
+  width: 90%;
+  height: 90%;
+  border: 2px solid rgba(0, 255, 170, 0.4);
+  border-radius: 50%;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 170, 0.3),
+    inset 0 0 20px rgba(0, 255, 170, 0.1);
+  animation: frameGlow 4s ease-in-out infinite alternate;
+  z-index: 2;
+}
+
+/* Logo principal - sans déformation */
+.logo-main {
+  position: relative;
+  max-width: 75%;
+  max-height: 75%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  filter: 
+    drop-shadow(0 0 10px rgba(0, 255, 170, 0.5))
+    drop-shadow(0 0 20px rgba(0, 255, 170, 0.3));
+  transition: all 0.3s ease;
+  z-index: 3;
+}
+
+.logo-main:hover {
+  filter: 
+    drop-shadow(0 0 15px rgba(0, 255, 170, 0.7))
+    drop-shadow(0 0 30px rgba(0, 255, 170, 0.5));
+  transform: scale(1.05);
+}
+
+/* Points lumineux décoratifs */
+.logo-enhanced-container::before,
+.logo-enhanced-container::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #00ffaa;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #00ffaa;
+  z-index: 4;
+}
+
+.logo-enhanced-container::before {
+  top: 20%;
+  left: 20%;
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+.logo-enhanced-container::after {
+  bottom: 20%;
+  right: 20%;
+  animation: sparkle 2s ease-in-out infinite 1s;
+}
+
+/* Nouvelles animations */
+@keyframes gentlePulse {
+  0%, 100% { 
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% { 
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+@keyframes frameGlow {
+  0% { 
+    box-shadow: 
+      0 0 20px rgba(0, 255, 170, 0.3),
+      inset 0 0 20px rgba(0, 255, 170, 0.1);
+  }
+  100% { 
+    box-shadow: 
+      0 0 30px rgba(0, 255, 170, 0.5),
+      inset 0 0 30px rgba(0, 255, 170, 0.2);
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.5); }
+}
+
+/* Titre */
+.institution-title {
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  line-height: 1.4;
+  margin: 20px 0;
+  text-shadow: var(--text-shadow);
+}
+
+/* Animations */
+@keyframes float-up {
+  0% { transform: translateY(100vh) scale(0.4); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(-100px) scale(1); opacity: 0; }
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes logoPulse {
+  0% { filter: drop-shadow(0 0 20px rgba(0, 255, 170, 0.7)); }
+  50% { filter: drop-shadow(0 0 40px rgba(0, 255, 170, 0.9)); }
+  100% { filter: drop-shadow(0 0 20px rgba(0, 255, 170, 0.7)); }
+}
+
+@keyframes glowPulse {
+  0% { box-shadow: inset 0 0 100px rgba(0, 255, 170, 0.1); }
+  50% { box-shadow: inset 0 0 150px rgba(0, 255, 170, 0.2); }
+  100% { box-shadow: inset 0 0 100px rgba(0, 255, 170, 0.1); }
+}
+
+/* New animations for enhanced circular logo */
+@keyframes rotateGlow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+  100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+}
+
+@keyframes innerPulse {
+  0% { 
+    box-shadow: 
+      inset 0 0 20px rgba(0, 255, 170, 0.2),
+      0 0 20px rgba(0, 255, 170, 0.1);
+  }
+  100% { 
+    box-shadow: 
+      inset 0 0 30px rgba(0, 255, 170, 0.4),
+      0 0 30px rgba(0, 255, 170, 0.2);
+  }
+}
+
+/* Version tablette */
+@media (max-width: 1024px) {
+  .logo-halo {
+    width: 50vmin;
+    max-width: 350px;
+  }
+  
+  .institution-title {
+    font-size: 2.2rem;
+    letter-spacing: 1.5px;
+  }
+}
+
+/* Version mobile */
+@media (max-width: 768px) {
+  .logo-halo {
+    width: 60vmin;
+    max-width: 300px;
+  }
+  
+  .institution-title {
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+  }
+  
+  .particle {
+    display: none; /* Désactiver les particules sur mobile */
+  }
+  
+  .main-content {
+    padding: 60px 15px 80px; /* Adjusted padding for mobile */
+    min-height: calc(100vh - 140px); /* Adjusted for mobile navbar/footer */
+  }
+}

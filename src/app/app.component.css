@@ -1,0 +1,19 @@
+/* Main app container styles */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Main content area styles */
+.main-content {
+  flex: 1;
+  padding: 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 0;
+  }
+}

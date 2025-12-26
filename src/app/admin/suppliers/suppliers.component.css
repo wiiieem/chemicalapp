@@ -1,0 +1,242 @@
+.suppliers-container {
+  --nuclear-green: #00ffaa;
+  --dark-bg: #0a0a12;
+  --text-shadow: 0 0 15px rgba(0, 255, 170, 0.7);
+  
+  padding: 0;
+  background: var(--dark-bg);
+  color: white;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Effets de fond similaires à la page d'accueil */
+.suppliers-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(0, 255, 170, 0.1) 0%, transparent 50%);
+  z-index: 1;
+}
+
+.suppliers-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 65px 20px 20px;
+  border-bottom: 1px solid rgba(0, 255, 170, 0.3);
+  position: relative;
+  z-index: 2;
+}
+
+.suppliers-header h2 {
+  color: var(--nuclear-green);
+  margin: 0;
+  font-size: 2rem;
+  text-shadow: var(--text-shadow);
+}
+
+.btn-add {
+  background: var(--nuclear-green);
+  color: var(--dark-bg);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: 'Orbitron', 'Segoe UI', sans-serif;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(0, 255, 170, 0.5);
+}
+
+.btn-add:hover {
+  background: #00cc88;
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(0, 255, 170, 0.7);
+}
+
+.suppliers-content {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 30px;
+  padding: 0 20px 30px;
+  position: relative;
+  z-index: 2;
+}
+
+.supplier-form {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  padding: 25px;
+  border-radius: 12px;
+  border: 2px solid rgba(0, 255, 170, 0.4);
+  box-shadow: 0 0 30px rgba(0, 255, 170, 0.2);
+}
+
+.supplier-form h3 {
+  color: var(--nuclear-green);
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-shadow: var(--text-shadow);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--nuclear-green);
+  font-weight: bold;
+  font-family: 'Orbitron', 'Segoe UI', sans-serif;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(0, 255, 170, 0.3);
+  border-radius: 6px;
+  color: white;
+  font-family: 'Orbitron', 'Segoe UI', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--nuclear-green);
+  box-shadow: 0 0 15px rgba(0, 255, 170, 0.3);
+}
+
+.form-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.form-actions button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: 'Orbitron', 'Segoe UI', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.form-actions button[type="submit"] {
+  background: var(--nuclear-green);
+  color: var(--dark-bg);
+  box-shadow: 0 0 20px rgba(0, 255, 170, 0.4);
+}
+
+.form-actions button[type="submit"]:hover {
+  background: #00cc88;
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(0, 255, 170, 0.6);
+}
+
+.form-actions button[type="button"] {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.form-actions button[type="button"]:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.suppliers-list {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  padding: 25px;
+  border-radius: 12px;
+  border: 2px solid rgba(0, 255, 170, 0.4);
+  box-shadow: 0 0 30px rgba(0, 255, 170, 0.2);
+}
+
+.suppliers-list h3 {
+  color: var(--nuclear-green);
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-shadow: var(--text-shadow);
+}
+
+.table-container {
+  overflow-x: auto;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid rgba(0, 255, 170, 0.3);
+}
+
+th {
+  background: rgba(0, 255, 170, 0.15);
+  color: var(--nuclear-green);
+  font-weight: bold;
+  font-family: 'Orbitron', 'Segoe UI', sans-serif;
+}
+
+tr:hover {
+  background: rgba(0, 255, 170, 0.05);
+}
+
+.btn-edit, .btn-delete {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 8px;
+  font-size: 12px;
+  font-weight: bold;
+  font-family: 'Orbitron', 'Segoe UI', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.btn-edit {
+  background: rgba(0, 255, 170, 0.4);
+  color: white;
+  box-shadow: 极 0 0 10px rgba(0, 255, 170, 0.3);
+}
+
+.btn-edit:hover {
+  background: rgba(0, 255, 170, 0.6);
+  transform: translateY(-2px);
+}
+
+.btn-delete {
+  background: rgba(255, 0, 0, 0.4);
+  color: white;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+}
+
+.btn-delete:hover {
+  background: rgba(255, 0, 0, 极 0.6);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .suppliers-content {
+    grid-template-columns: 1fr;
+  }
+}

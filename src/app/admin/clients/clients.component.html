@@ -1,0 +1,145 @@
+<div class="clients-container">
+  <div class="clients-header">
+    <h2>Gestion des Clients</h2>
+    <button class="btn-add" (click)="resetForm()">Ajouter un client</button>
+  </div>
+
+  <div class="clients-content">
+    <!-- Client Form -->
+    <div class="client-form" *ngIf="!isEditMode || selectedClient">
+      <h3>
+        {{ isEditMode ? "Modifier le client" : "Ajouter un nouveau client" }}
+      </h3>
+      <form [formGroup]="clientForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label>Nom *</label>
+          <input
+            type="text"
+            formControlName="name"
+            placeholder="Nom du client"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Email *</label>
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="Email du client"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Téléphone *</label>
+          <input
+            type="text"
+            formControlName="phone"
+            placeholder="Téléphone du client"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Adresse *</label>
+          <input
+            type="text"
+            formControlName="address"
+            placeholder="Adresse du client"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Catégorie *</label>
+          <input
+            type="text"
+            formControlName="category"
+            placeholder="Catégorie du client"
+          />
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" [disabled]="!clientForm.valid">
+            {{ isEditMode ? "Mettre à jour" : "Ajouter" }}
+          </button>
+          <button type="button" (click)="resetForm()">Annuler</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Clients List -->
+    <div class="clients-list">
+      <h3>Liste des clients ({{ clients.length }})</h3>
+
+      <div *ngIf="clients.length === 0" class="empty-state">
+        <p>📝 Aucun client ajouté</p>
+        <small>Utilisez le formulaire pour ajouter le premier client</small>
+      </div>
+
+      <div *ngIf="clients.length > 0" class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Email</th>
+              <th>Téléphone</th>
+              <th>Adresse</th>
+              <th>Catégorie</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let client of clients">
+              <td>{{ client.name }}</td>
+              <td>{{ client.email }}</td>
+              <td>{{ client.phone }}</td>
+              <td>{{ client.address }}</td>
+              <td>{{ client.category }}</td>
+              <td>
+                <button class="btn-edit" (click)="editClient(client)">
+                  Modifier
+                </button>
+                <button class="btn-view" (click)="viewOrderHistory(client)">
+                  Voir les commandes
+                </button>
+                <button class="btn-delete" (click)="deleteClient(client)">
+                  Supprimer
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order History Modal -->
+  <div
+    class="modal-overlay"
+    *ngIf="showOrderHistory"
+    (click)="closeOrderHistory()"
+  >
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Historique des commandes - {{ selectedClient?.name }}</h3>
+        <button class="btn-close" (click)="closeOrderHistory()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="client-info">
+          <h4>Informations du client</h4>
+          <p><strong>Email:</strong> {{ selectedClient?.email }}</p>
+          <p><strong>Téléphone:</strong> {{ selectedClient?.phone }}</p>
+          <p><strong>Adresse:</strong> {{ selectedClient?.address }}</p>
+          <p><strong>Catégorie:</strong> {{ selectedClient?.category }}</p>
+        </div>
+
+        <div class="orders-section">
+          <h4>Produits commandés ({{ selectedClientOrders.length }})</h4>
+
+          <div *ngIf="selectedClientOrders.length === 0" class="no-orders">
+            <p>Aucune commande trouvée pour ce client.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

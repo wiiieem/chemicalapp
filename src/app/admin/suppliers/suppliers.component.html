@@ -1,0 +1,116 @@
+<div class="suppliers-container">
+  <div class="suppliers-header">
+    <h2>Gestion des Fournisseurs</h2>
+    <button class="btn-add" (click)="resetForm()">
+      Ajouter un fournisseur
+    </button>
+  </div>
+
+  <div class="suppliers-content">
+    <!-- Supplier Form -->
+    <div class="supplier-form" *ngIf="!isEditMode || selectedSupplier">
+      <h3>
+        {{
+          isEditMode
+            ? "Modifier le fournisseur"
+            : "Ajouter un nouveau fournisseur"
+        }}
+      </h3>
+      <form [formGroup]="supplierForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label>Nom *</label>
+          <input
+            type="text"
+            formControlName="name"
+            placeholder="Nom du fournisseur"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Email *</label>
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="Email du fournisseur"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Téléphone *</label>
+          <input
+            type="text"
+            formControlName="phone"
+            placeholder="Téléphone du fournisseur"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Adresse *</label>
+          <input
+            type="text"
+            formControlName="address"
+            placeholder="Adresse du fournisseur"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Entreprise *</label>
+          <input
+            type="text"
+            formControlName="company"
+            placeholder="Nom de l'entreprise"
+          />
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" [disabled]="!supplierForm.valid">
+            {{ isEditMode ? "Mettre à jour" : "Ajouter" }}
+          </button>
+          <button type="button" (click)="resetForm()">Annuler</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Suppliers List -->
+    <div class="suppliers-list">
+      <h3>Liste des fournisseurs ({{ suppliers.length }})</h3>
+
+      <div *ngIf="suppliers.length === 0" class="empty-state">
+        <p>🏢 Aucun fournisseur ajouté</p>
+        <small>Utilisez le formulaire pour ajouter vos fournisseurs</small>
+      </div>
+
+      <div *ngIf="suppliers.length > 0" class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Email</th>
+              <th>Téléphone</th>
+              <th>Adresse</th>
+              <th>Entreprise</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let supplier of suppliers">
+              <td>{{ supplier.name }}</td>
+              <td>{{ supplier.email }}</td>
+              <td>{{ supplier.phone }}</td>
+              <td>{{ supplier.address }}</td>
+              <td>{{ supplier.company }}</td>
+              <td>
+                <button class="btn-edit" (click)="editSupplier(supplier)">
+                  Modifier
+                </button>
+                <button class="btn-delete" (click)="deleteSupplier(supplier)">
+                  Supprimer
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

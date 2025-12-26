@@ -1,1 +1,38 @@
-<p>navbar works!</p>
+<nav class="navbar">
+  <div class="nav-left">
+    <a
+      [routerLink]="currentUser ? '/admin/dashboard' : '/home'"
+      class="nav-brand-link"
+    >
+      <img src="assets/image/logo3.png" alt="CNSTN" class="nav-logo-img" />
+      <span class="nav-brand">CNSTN</span>
+    </a>
+  </div>
+
+  <div class="nav-right">
+    <ng-container *ngIf="currentUser; else notLoggedIn">
+      <!-- Affiché quand connecté -->
+      <div class="user-info">
+        <span class="user-welcome">{{ getWelcomeMessage() }}</span>
+        <span class="user-role">{{ getUserRole() }}</span>
+      </div>
+
+      <!-- Liens pour admin seulement -->
+      <ng-container *ngIf="currentUser.role === 'admin'">
+        <a routerLink="/admin/dashboard" class="nav-link">Tableau de bord</a>
+        <a routerLink="/admin/products" class="nav-link">Produits</a>
+        <a routerLink="/admin/clients" class="nav-link">Clients</a>
+        <a routerLink="/admin/suppliers" class="nav-link">Fournisseurs</a>
+        <a routerLink="/admin/requests" class="nav-link">Demandes</a>
+      </ng-container>
+
+      <button class="btn-logout" (click)="logout()">Déconnexion</button>
+    </ng-container>
+
+    <ng-template #notLoggedIn>
+      <!-- Affiché quand déconnecté -->
+      <a routerLink="/home" class="nav-link">Accueil</a>
+      <a routerLink="/login" class="nav-link">Connexion</a>
+    </ng-template>
+  </div>
+</nav>

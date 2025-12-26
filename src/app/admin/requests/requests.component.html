@@ -1,0 +1,269 @@
+<div class="requests-container">
+  <div class="requests-header">
+    <h2>Gestion des Demandes de Produits</h2>
+    <button class="btn-add" (click)="resetForm()">Nouvelle Demande</button>
+  </div>
+
+  <div class="requests-content">
+    <!-- Search and Filter Section -->
+    <div class="search-filter-section">
+      <div class="search-box">
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          (input)="onSearchChange()"
+          placeholder="Rechercher par produit, client ou notes..."
+          class="search-input"
+        />
+      </div>
+
+      <div class="filter-box">
+        <select
+          [(ngModel)]="selectedFilter"
+          (change)="onFilterChange()"
+          class="filter-select"
+        >
+          <option value="all">Toutes les demandes</option>
+          <option value="pending">Demandes en attente</option>
+          <option value="completed">Demandes complétées</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-section">
+      <div class="stat-card">
+        <h4>Total des demandes</h4>
+        <span class="stat-number">{{ history.length }}</span>
+      </div>
+      <div class="stat-card">
+        <h4>En attente</h4>
+        <span class="stat-number pending">{{
+          getPendingRequests().length
+        }}</span>
+      </div>
+      <div class="stat-card">
+        <h4>Complétées</h4>
+        <span class="stat-number completed">{{
+          getCompletedRequests().length
+        }}</span>
+      </div>
+    </div>
+
+    <!-- Request Form -->
+    <div class="request-form" *ngIf="!isEditMode || selectedHistory">
+      <h3>
+        {{ isEditMode ? "Modifier la demande" : "Nouvelle Demande de Produit" }}
+      </h3>
+      <form [formGroup]="historyForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Produit *</label>
+            <select formControlName="productId" (change)="onProductChange()">
+              <option value="">Sélectionner un produit</option>
+              <option *ngFor="let product of products" [value]="product.id">
+                {{ product.name }} (Stock: {{ product.quantity || 0 }})
+              </option>
+            </select>
+            <div
+              *ngIf="
+                historyForm.get('productId')?.invalid &&
+                historyForm.get('productId')?.touched
+              "
+              class="error-message"
+            >
+              Sélectionnez un produit
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Client *</label>
+            <select formControlName="clientId">
+              <option value="">Sélectionner un client</option>
+              <option *ngFor="let client of clients" [value]="client.id">
+                {{ client.name }} - {{ client.category }}
+              </option>
+            </select>
+            <div
+              *ngIf="
+                historyForm.get('clientId')?.invalid &&
+                historyForm.get('clientId')?.touched
+              "
+              class="error-message"
+            >
+              Sélectionnez un client
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Quantité *</label>
+            <input
+              type="number"
+              formControlName="quantity"
+              placeholder="Quantité demandée"
+              min="1"
+              max="1000"
+            />
+            <div
+              *ngIf="
+                historyForm.get('quantity')?.invalid &&
+                historyForm.get('quantity')?.touched
+              "
+              class="error-message"
+            >
+              Quantité invalide (1-1000)
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Date de transaction *</label>
+            <input type="date" formControlName="transactionDate" />
+            <div
+              *ngIf="
+                historyForm.get('transactionDate')?.invalid &&
+                historyForm.get('transactionDate')?.touched
+              "
+              class="error-message"
+            >
+              Date requise
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Notes (max 500 caractères)</label>
+          <textarea
+            formControlName="notes"
+            placeholder="Notes sur la demande..."
+            maxlength="500"
+          ></textarea>
+          <div class="char-count">
+            {{ historyForm.get("notes")?.value?.length || 0 }}/500
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" formControlName="isPaperRequest" />
+              Demande sur papier (scannée)
+            </label>
+          </div>
+        </div>
+
+        <div
+          class="form-group"
+          *ngIf="historyForm.get('isPaperRequest')?.value"
+        >
+          <label>Photo scannée de la demande</label>
+          <input
+            type="file"
+            (change)="onFileSelected($event)"
+            accept="image/*,.pdf"
+            class="file-input"
+          />
+          <div
+            *ngIf="historyForm.get('scannedPhotoUrl')?.value"
+            class="file-info"
+          >
+            Fichier sélectionné:
+            {{ getFileName(historyForm.get("scannedPhotoUrl")?.value) }}
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" [disabled]="!historyForm.valid">
+            {{ isEditMode ? "Mettre à jour" : "Créer la demande" }}
+          </button>
+          <button type="button" (click)="resetForm()" class="btn-cancel">
+            Annuler
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Requests List -->
+    <div class="requests-list">
+      <h3>Historique des Demandes ({{ filteredHistory.length }})</h3>
+
+      <div *ngIf="filteredHistory.length === 0" class="empty-state">
+        <p>📄 Aucune demande enregistrée</p>
+        <small>Créez votre première demande via le formulaire</small>
+      </div>
+
+      <div *ngIf="filteredHistory.length > 0" class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Produit</th>
+              <th>Bénéficiaire</th>
+              <th>Quantité</th>
+              <th>Date</th>
+              <th>Type de Demande</th>
+              <th>Photo Scannée</th>
+              <th>Statut</th>
+              <th>Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of filteredHistory"
+              [class]="getStatusClass(item.status)"
+            >
+              <td>{{ item.productName }}</td>
+              <td>{{ item.clientName }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.transactionDate }}</td>
+              <td>
+                <span
+                  class="request-type-badge"
+                  [class]="getRequestTypeClass(item.isPaperRequest)"
+                >
+                  {{ getRequestTypeText(item.isPaperRequest) }}
+                </span>
+              </td>
+              <td>
+                <span *ngIf="item.scannedPhotoUrl; else noPhoto">
+                  <button
+                    class="btn-view"
+                    (click)="viewScannedPhoto(item.scannedPhotoUrl)"
+                  >
+                    Voir la photo
+                  </button>
+                </span>
+                <ng-template #noPhoto>-</ng-template>
+              </td>
+              <td>
+                <span
+                  class="status-badge"
+                  [class]="getStatusClass(item.status)"
+                >
+                  {{ getStatusText(item.status) }}
+                </span>
+              </td>
+              <td>{{ item.notes || "-" }}</td>
+              <td>
+                <button class="btn-edit" (click)="editHistory(item)">
+                  Modifier
+                </button>
+                <button class="btn-delete" (click)="deleteHistory(item)">
+                  Supprimer
+                </button>
+                <button
+                  class="btn-complete"
+                  *ngIf="item.status === 'pending'"
+                  (click)="changeStatus(item, 'completed')"
+                >
+                  Marquer comme traité
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
